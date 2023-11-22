@@ -5,7 +5,7 @@ const currencies = ["USD", "AUD", "NZD", "GBP", "EUR", "SGD"];
 
 const reducer = (result, action) => {
   switch (action.type) {
-    case "FETCH_SCCESS":
+    case "FETCH_SUCCESS":
       return { loading: false, data: action.payload, error: "" };
     case "FETCH_ERROR":
       return { loading: false, data: {}, error: action.payload };
@@ -65,6 +65,7 @@ export default function BitcoinRatesWithUseReducer() {
         ) : (
           result.data.bitcoin[currency.toLowerCase()]
         )}
+        {!result.loading && currency}
         {result.error && result.error}
       </h4>
     </div>
