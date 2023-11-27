@@ -50,7 +50,6 @@ export default function NavBar2() {
                 aria-label="menu"
                 sx={{ mr: 2 }}
               >
-                <MenuIcon />
               </IconButton>
               <Typography
                 variant="h6"
@@ -58,8 +57,9 @@ export default function NavBar2() {
                 sx={{ flexGrow: 1 }}
               ></Typography>
               <Stack direction="row" spacing={2}>
-                <Button color="inherit">Contact</Button>
-                <Button color="inherit">Login</Button>
+                <Button color="inherit">
+                  <NavLink to="/login">Login</NavLink>
+                </Button>
                 <Button
                   color="inherit"
                   id="resources-button"
@@ -89,6 +89,9 @@ export default function NavBar2() {
                   horizontal: "right",
                 }}
               >
+                <MenuItem onClick={handleClose}>
+                  <NavLink to="/">Home</NavLink>
+                </MenuItem>
                 <MenuItem onClick={handleClose}>
                   <NavLink to="/bitcoin">Bitcoin</NavLink>
                 </MenuItem>

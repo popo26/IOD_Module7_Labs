@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      {/* <BitcoinRates/> */}
+      <BitcoinRates/>
       <BitcoinRatesWithUseReducer />
     </>
   )

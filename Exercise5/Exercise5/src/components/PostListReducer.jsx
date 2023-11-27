@@ -1,52 +1,60 @@
 import { useEffect, useReducer } from "react"; // continued on next slide
 import axios from "axios"; // first do 'npm install axios' - alternative to fetch
+//import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import { Grid } from "@mui/material";
 
 export default function PostListReducer() {
   const [postsResult, dispatch] = useReducer(reducer, {
-    // initial state for postsResult state variable
-    loading: true, // true when loading and no data in posts
-    posts: [], // empty until data is fetched
-    error: "", // empty unless there was an error
+    loading: true,
+    posts: [],
+    error: "",
   });
   useEffect(() => {
     axios
-      .get("https://jsonplaceholder.typicode.com/posts?_limit=5") // modify this URL to test the error case
+      .get("https://jsonplaceholder.typicode.com/posts?_limit=5")
       .then((response) => {
-        // object passed to dispatch holds all data needed for updating state: both type of update and associated data
-        dispatch({ type: "FETCH_SUCCESS", payload: response.data }); // dispatch calls reducer function and triggers re-render
+        dispatch({ type: "FETCH_SUCCESS", payload: response.data });
       })
       .catch((error) => {
-        dispatch({ type: "FETCH_ERROR", payload: error.message }); // lets us handle different types of state changes differently
+        dispatch({ type: "FETCH_ERROR", payload: error.message });
       });
   }, []);
 
-  // continued from previous slide
-  // returned JSX uses the 3 things stored in postsResult state object to conditionally render data or an error message
+  //   ● Extension: Include the PostList component and style
+  // using MUI cards and grids
   return (
     <div className="PostList componentBox">
-      {postsResult.loading ? (
-        <div>Loading posts...</div>
-      ) : (
-        postsResult.posts.map(
-          (
-            post // list of posts is just one of the things stored in the postsResult state object
-          ) => (
-            <div className="post" key={post.id}>
-              <h3>
-                Post #{post.id}: {post.title}
-              </h3>
-              <p>{post.body}</p>
-            </div>
-          )
-        )
-      )}
-      <div className="error">{postsResult.error}</div>
+      <Grid container spacing={2} my={2}>
+        {postsResult.loading ? (
+          <div>Loading posts...</div>
+        ) : (
+          postsResult.posts.map((post) => (
+            <Grid item xs={4} key={post.id}>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
+                  <Typography
+                    sx={{ fontSize: 14 }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Post #{post.id}: {post.title}
+                  </Typography>
+                  <Typography variant="body2">{post.body}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        )}
+
+        <div className="error">{postsResult.error}</div>
+      </Grid>
     </div>
   );
 }
-// reducer function for axios fetch response
-// called from dispatch when state is updated, lets us handle different actions
-// return object should match same structure as initial state passed to useReducer
+
 function reducer(postsResult, action) {
   switch (action.type) {
     case "FETCH_SUCCESS":
@@ -56,4 +64,4 @@ function reducer(postsResult, action) {
     default:
       return { ...postsResult, loading: false };
   }
-} // What would this component look like using useState instead of useReducer?
+}
